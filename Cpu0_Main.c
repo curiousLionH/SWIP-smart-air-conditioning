@@ -128,6 +128,28 @@ void ERU0_ISR(void){
     cur_mode ^= 1<<0;
 
     switch (cur_mode)
+<<<<<<< Updated upstream
+=======
+
+
+__interrupt(0x0A) __vector_table(0)
+void ERU0_ISR(void)
+{
+    P10_OUT.U ^= 0x1 << P1_BIT_LSB_IDX;
+}
+
+__interrupt(0x0B) __vector_table(0)
+void CCU60_T12_ISR(void)
+{
+    VADC_startConversion();
+    adcResult = VADC_readResult();
+}
+
+__interrupt(0x0C) __vector_table(0)
+void ERU_D2_ISR(void)
+{
+    if ((P02_OUT.U & (0x1 << P7_BIT_LSB_IDX)) && (P10_OUT.U & (0x1 << P3_BIT_LSB_IDX)))
+>>>>>>> Stashed changes
     {
     case 0x0:   // Manual, RGB OFF
         P02_OUT.U &= ~(0x1 << P7_BIT_LSB_IDX);
