@@ -92,6 +92,7 @@ void initBTN(void){
     P02_IOCR0.U |= (0x02 << PC1_BIT_LSB_IDX); /* P02.1(D3) -> general input mode(pull-up) */
 }
 
+<<<<<<< Updated upstream
 void initERU(void){
     /* ERU Interrupt Setting */
     // ERS channel 2의  4개 External Request 입력 중, 두번째 인덱스 선택 , -> ln21
@@ -128,6 +129,27 @@ void ERU0_ISR(void){
     cur_mode ^= 1<<0;
 
     switch (cur_mode)
+=======
+
+
+__interrupt(0x0A) __vector_table(0)
+void ERU0_ISR(void)
+{
+    P10_OUT.U ^= 0x1 << P1_BIT_LSB_IDX;
+}
+
+__interrupt(0x0B) __vector_table(0)
+void CCU60_T12_ISR(void)
+{
+    VADC_startConversion();
+    adcResult = VADC_readResult();
+}
+
+__interrupt(0x0C) __vector_table(0)
+void ERU_D2_ISR(void)
+{
+    if ((P02_OUT.U & (0x1 << P7_BIT_LSB_IDX)) && (P10_OUT.U & (0x1 << P3_BIT_LSB_IDX)))
+>>>>>>> Stashed changes
     {
     case 0x0:   // Manual, RGB OFF
         P02_OUT.U &= ~(0x1 << P7_BIT_LSB_IDX);
@@ -145,6 +167,10 @@ void ERU0_ISR(void){
     }
 }
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 int core0_main(void)
 {
     IfxCpu_enableInterrupts();
