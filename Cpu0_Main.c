@@ -125,11 +125,8 @@ void initERU(void){
 
 // priority 10으로 설정, cpu0을 이용하도록 설정
 __interrupt(0x0A) __vector_table(0) /* IGNORE WARNING IN VS CODE! */
-void ERU0_ISR(void){
-    cur_mode ^= 1<<0;
-
-    switch (cur_mode)
-=======
+void ERU0_ISR(void){  
+}
 
 
 __interrupt(0x0A) __vector_table(0)
@@ -149,7 +146,6 @@ __interrupt(0x0C) __vector_table(0)
 void ERU_D2_ISR(void)
 {
     if ((P02_OUT.U & (0x1 << P7_BIT_LSB_IDX)) && (P10_OUT.U & (0x1 << P3_BIT_LSB_IDX)))
->>>>>>> Stashed changes
     {
     case 0x0:   // Manual, RGB OFF
         P02_OUT.U &= ~(0x1 << P7_BIT_LSB_IDX);
@@ -167,10 +163,6 @@ void ERU_D2_ISR(void)
     }
 }
 
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 int core0_main(void)
 {
     IfxCpu_enableInterrupts();
