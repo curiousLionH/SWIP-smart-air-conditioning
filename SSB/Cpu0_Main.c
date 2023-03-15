@@ -132,7 +132,7 @@ void initBuzzer(void);
 __interrupt(0x0A) __vector_table(0)
 void ERU0_ISR(void)
 {
-    // Manual (white) => Smart (Green)
+    // Manual (White) => Smart (Green)
     if ( (P10_OUT.U & (0x1 << P3_BIT_LSB_IDX)) )
     {
         P10_OUT.U &= ~(0x1 << P3_BIT_LSB_IDX);
@@ -140,15 +140,19 @@ void ERU0_ISR(void)
         P02_OUT.U &= ~(0x1 << P7_BIT_LSB_IDX);
     }
 
-    // Smart (Green) => Manual (white)
+    // Smart (Green) => Manual (White)
     else
     {
         P10_OUT.U |= (0x1 << P3_BIT_LSB_IDX);
         P10_OUT.U |= (0x1 << P5_BIT_LSB_IDX);
         P02_OUT.U |= (0x1 << P7_BIT_LSB_IDX); 
     }
-
-    // P02_OUT.U |= (0x1 << P3_BIT_LSB_IDX);
+    
+    GTM_TOM0_CH11_SR0.B.SR0 = 6250000 / 130;
+    GTM_TOM0_CH11_SR1.B.SR1 = 3125000 / 130;
+    for(unsigned int i = 0; i < 20000000; i++);
+    GTM_TOM0_CH11_SR0.B.SR0 = 0;
+    GTM_TOM0_CH11_SR1.B.SR1 = 0;
 }
 
 __interrupt(0x0B) __vector_table(0)
@@ -182,6 +186,7 @@ int core0_main(void)
     initBuzzer();
 
     GTM_TOM0_TGC0_GLB_CTRL.U |= 0x1 << HOST_TRIG_BIT_LSB_IDX;       // trigger update request signal
+    GTM_TOM0_TGC1_GLB_CTRL.U |= 0x1 << HOST_TRIG_BIT_LSB_IDX;       // trigger update request signal
     unsigned short duty = 0;
 
     while(1)
@@ -414,8 +419,8 @@ void initGTM(void)
 
 
     // GTM TOM0 PWM configuration
-    // P10.2 => TOUT104, TOMO_2, TOM0, Channel 2
 
+    // P10.2 => TOUT104, TOMO_2, TOM0, Channel 2
     GTM_TOM0_TGC0_GLB_CTRL.U |= 0x2 << UPEN_CTRL2_BIT_LSB_IDX;      // TOM channel 2 update enable
 
     GTM_TOM0_TGC0_ENDIS_CTRL.U |= 0x2 << ENDIS_CTRL2_BIT_LSB_IDX;   // enable channel 2 on update trigger
@@ -433,10 +438,27 @@ void initGTM(void)
 
     GTM_TOUTSEL6.U &= ~(0x3 << SEL8_BIT_LSB_IDX);                   // TOUT104 => TOUTSEL6 => SEL8 bits
                                                                     // 104 = 16 * 6 + 8
+
+    // set GTM TOM0 channel 11 - Buzzer
+    GTM_TOM0_TGC1_GLB_CTRL.B.UPEN_CTRL3     |= 0x2;                   // TOM0 channel 11 enable
+    GTM_TOM0_TGC1_ENDIS_CTRL.B.ENDIS_CTRL3  |= 0x2;                   // enable channel 11 on update trigger
+    GTM_TOM0_TGC1_OUTEN_CTRL.B.OUTEN_CTRL3  |= 0x2;                   // enable channel 11 output on update trigger
+
+    // TOM 0_11
+    GTM_TOM0_CH11_CTRL.B.SL = 0x1;                                  // high signal level for duty cycle
+    GTM_TOM0_CH11_CTRL.B.CLK_SRC_SR = 0x1;                          // clock source --> CMU_FXCLK(1) = 6250 kHz
+    GTM_TOM0_CH11_SR0.B.SR0 = 12500 - 1;                            // PWM freq. = 6250 kHz / 12500 = 500 Hz
+    GTM_TOM0_CH11_SR1.B.SR1 = 6250 - 1;                             // duty cycle = 6250 / 12500 = 50 %
+
+    GTM_TOM0_CH11_SR0.B.SR0 = 0;
+    GTM_TOM0_CH11_SR1.B.SR1 = 0;
+
+    // TOUT pin selection
+    GTM_TOUTSEL0.B.SEL3 = 0x0;                                      // TOUT3  --> TOM0 channel 11
 }
 
 void initBuzzer(void)
-{
-    // P02_IOCR0.B.PC3 = 0x11; // GTM Output
-    P02_IOCR0.B.PC3 = 0x10; // General-purpose Output
+{   
+    P02_IOCR0.B.PC3 = 0x11; // GTM Output
+    //P02_IOCR0.B.PC3 = 0x10; // General-purpose Output
 }
