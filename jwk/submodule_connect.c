@@ -29,8 +29,12 @@ void initConnect(void)
     P00_IOCR0.U &= ~(0x1F << PC2_BIT_LSB_IDX);
     P00_IOCR0.U |= (0x10 << PC2_BIT_LSB_IDX);
 
-    P00_OUT.U |= 0x1 << P3_BIT_LSB_IDX;
-    P00_OUT.U |= 0x1 << P2_BIT_LSB_IDX;
+    P00_IOCR0.U &= ~(0x1F << PC1_BIT_LSB_IDX);
+    P00_IOCR0.U |= (0x10 << PC1_BIT_LSB_IDX);
+
+    P00_OUT.U &= ~(0x1 << P3_BIT_LSB_IDX);
+    P00_OUT.U &= ~(0x1 << P2_BIT_LSB_IDX);
+    P00_OUT.U &= ~(0x1 << P1_BIT_LSB_IDX);
 
 }
 
@@ -81,23 +85,27 @@ void sendTX(int* tgtMode)
     {
     case 0:
         // send mode 0
+        P00_OUT.U &= ~(0x1 << P1_BIT_LSB_IDX); // P00.1 OFF
         P00_OUT.U &= ~(0x1 << P2_BIT_LSB_IDX); // P00.2 OFF
         P00_OUT.U &= ~(0x1 << P3_BIT_LSB_IDX); // P00.3 OFF
         break;
     case 1:
         // send mode 1
+        P00_OUT.U &= ~(0x1 << P1_BIT_LSB_IDX); // P00.1 OFF
         P00_OUT.U |=  (0x1 << P2_BIT_LSB_IDX); // P00.2 ON
         P00_OUT.U &= ~(0x1 << P3_BIT_LSB_IDX); // P00.3 OFF
         break;
     case 2:
         // send mode 2
+        P00_OUT.U &= ~(0x1 << P1_BIT_LSB_IDX); // P00.1 OFF
         P00_OUT.U &= ~(0x1 << P2_BIT_LSB_IDX); // P00.2 OFF
         P00_OUT.U |=  (0x1 << P3_BIT_LSB_IDX); // P00.3 ON
         break;
     case 3:
         // send mode 3
-        P00_OUT.U |=  (0x1 << P2_BIT_LSB_IDX); // P00.2 ON
-        P00_OUT.U |=  (0x1 << P3_BIT_LSB_IDX); // P00.3 ON
+        P00_OUT.U |=  (0x1 << P1_BIT_LSB_IDX); // P00.1 ON
+        P00_OUT.U &= ~(0x1 << P2_BIT_LSB_IDX); // P00.2 ON
+        P00_OUT.U &= ~(0x1 << P3_BIT_LSB_IDX); // P00.3 ON
         break;
     default:
         break;

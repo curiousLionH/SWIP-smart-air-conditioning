@@ -81,7 +81,6 @@ int core0_main(void)
             VADC_readResult(&adcResult);
 
             decideSpeedMode(&adcResult, &tgtMode);
-
         }
 
         // Smart Mode => RGB LED (GREEN)
