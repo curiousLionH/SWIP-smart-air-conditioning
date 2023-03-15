@@ -17,7 +17,7 @@
 void initSensors(void)
 {
     initERU();
-    //initCCU60();
+    initCCU60();
     initLED();
     initRGBLED();
     initVADC();

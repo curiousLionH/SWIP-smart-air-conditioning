@@ -51,7 +51,8 @@ void initCCU60(void)
     CCU60_TCTR0.U &= ~(0x1 << CTM_BIT_LSB_IDX);         // T12 auto reset when period match (PM) occur
 
 
-    CCU60_T12PR.U = 24414 -1;                           // PM interrupt freq. = f_T12 / (T12PR + 1)
+    // CCU60_T12PR.U = 24414 -1;                           // PM interrupt freq. = f_T12 / (T12PR + 1)
+    CCU60_T12PR.U = 48828 - 1;
     CCU60_TCTR4.U |= 0x1 << T12STR_BIT_LSB_IDX;         // load T12PR from shadow register
 
     CCU60_T12.U = 0;                                    // clear T12 counter register

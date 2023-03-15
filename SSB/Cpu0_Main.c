@@ -35,6 +35,7 @@
 #include "IfxGtm_reg.h"
 
 IfxCpu_syncEvent g_cpuSyncEvent = 0;
+unsigned int cpu0_cnt;
 
 __interrupt(0x0A) __vector_table(0)
 void ERU0_ISR(void)
@@ -45,7 +46,8 @@ void ERU0_ISR(void)
 __interrupt(0x0B) __vector_table(0)
 void CCU60_T12_ISR(void)
 {
-    //P10_OUT.U ^= 0x1 << P2_BIT_LSB_IDX;  // toggle P10.2 (LED D13 BLUE)
+    if ( cpu0_cnt <= 20 )
+       cpu0_cnt++;
 }
 
 
