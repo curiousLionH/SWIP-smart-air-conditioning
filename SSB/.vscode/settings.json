@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "ifx_types.h": "c",
+        "ifxccu6_reg.h": "c"
+    }
+}

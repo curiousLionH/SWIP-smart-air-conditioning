@@ -7,7 +7,6 @@
 #ifndef CPU_MAIN_H_
 #define CPU_MAIN_H_
 // Port registers
-// Port registers
 #define PC1_BIT_LSB_IDX         11
 #define PC2_BIT_LSB_IDX         19
 #define PC3_BIT_LSB_IDX         27
@@ -87,15 +86,16 @@
 #define TRIGOUT_BIT_LSB_IDX         24
 #define SL_BIT_LSB_IDX              11
 
+
 void initLED(void);
-void initPWMLED(void);
 void initButton(void);
 void initERU(void);
 void initCCU60(void);
 void initRGBLED(void);
 void initVADC(void);
 void VADC_startConversion(void);
-void VADC_readResult(unsigned int*);
+unsigned int VADC_readResult(void);
 void initGTM(void);
+void initBuzzer(void);
 
 #endif 

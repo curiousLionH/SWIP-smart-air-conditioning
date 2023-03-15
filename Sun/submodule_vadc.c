@@ -65,7 +65,7 @@ void initVADC(void)
 }
 
 /*
-    Function Name   : initPWMLED
+    Function Name   : VADC_startConversion
     Author          : SWIP 1th - Team 1
     Date            : 2023.03.15
     input           : void

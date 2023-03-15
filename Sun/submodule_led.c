@@ -66,4 +66,9 @@ void initRGBLED(void)
     P02_IOCR4.U |= 0x10 << PC7_BIT_LSB_IDX;
     P10_IOCR4.U |= 0x10 << PC5_BIT_LSB_IDX;
     P10_IOCR0.U |= 0x10 << PC3_BIT_LSB_IDX;
+
+    // set default mode (manual mode, white)
+    P10_OUT.U |= (0x1 << P3_BIT_LSB_IDX); // Blue
+    P10_OUT.U |= (0x1 << P5_BIT_LSB_IDX); // Green
+    P02_OUT.U |= (0x1 << P7_BIT_LSB_IDX); // Red
 }
