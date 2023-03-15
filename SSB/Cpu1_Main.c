@@ -34,7 +34,6 @@
 
 extern IfxCpu_syncEvent g_cpuSyncEvent;
 extern unsigned int cpu0_cnt;
-
 unsigned int cpu1_cnt;
 
 unsigned int duty[4][2] = {{659, 523},
@@ -43,6 +42,34 @@ unsigned int duty[4][2] = {{659, 523},
                            {988, 659}};
 unsigned int duty_bip[1] = {1397};
 unsigned int duty_inc[24] = {659, 659, 698, 698, 740, 740, 784, 784, 831, 831, 880, 880, 932, 932, 988, 988, 1047, 1047, 1109, 1109, 1175, 1175, 1245, 1245};
+
+__interrupt(0x0B) __vector_table(1)
+void CCU61_T12_ISR(void)
+{
+    cpu1_cnt++;
+    if ( cpu0_cnt != cpu1_cnt)
+    {
+        while (1)
+        {
+            for (unsigned int i = 0; i < 21; i++)
+            {
+                for (unsigned int j = 0; j < 1000000; j++)
+                    ;
+                GTM_TOM0_CH11_SR0.B.SR0 = 6250000 / duty_inc[i];
+                GTM_TOM0_CH11_SR1.B.SR1 = 3125000 / duty_inc[i];
+            }
+
+            for (unsigned int i = 0; i < 4; i++)
+            {
+                for (unsigned int j = 0; j < 1000000; j++)
+                    ;
+                GTM_TOM0_CH11_SR0.B.SR0 = 6250000 / duty_inc[21];
+                GTM_TOM0_CH11_SR1.B.SR1 = 3125000 / duty_inc[21];
+            }
+        }
+    }
+
+}
 
 int core1_main(void)
 {
@@ -65,7 +92,6 @@ int core1_main(void)
         
         if ( cpu0_cnt == temp )
         {
-            
             while (1)
             {
                 for (unsigned int i = 0; i < 21; i++)
