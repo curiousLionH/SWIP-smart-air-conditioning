@@ -104,8 +104,8 @@ void sendTX(int* tgtMode)
     case 3:
         // send mode 3
         P00_OUT.U |=  (0x1 << P1_BIT_LSB_IDX); // P00.1 ON
-        P00_OUT.U &= ~(0x1 << P2_BIT_LSB_IDX); // P00.2 ON
-        P00_OUT.U &= ~(0x1 << P3_BIT_LSB_IDX); // P00.3 ON
+        P00_OUT.U &= ~(0x1 << P2_BIT_LSB_IDX); // P00.2 OFF
+        P00_OUT.U &= ~(0x1 << P3_BIT_LSB_IDX); // P00.3 OFF
         break;
     default:
         break;
