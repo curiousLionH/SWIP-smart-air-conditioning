@@ -82,7 +82,7 @@ void decideSpeedMode(unsigned int* adcResult, int* tgtMode)
     Description     : send TX (void)
 */
 
-void sendTX(int* tgtMode, bool MODE, int smartAcc)
+void sendTX(int* tgtMode, int MODE, int* smartAcc)
 {
     // Manual Mode => RGB LED (WHITE)
     if(!MODE)
@@ -124,7 +124,7 @@ void sendTX(int* tgtMode, bool MODE, int smartAcc)
     {
         P00_OUT.U |=  (0x1 << P0_BIT_LSB_IDX); // P00.0 ON
 
-        switch (smartAcc)
+        switch (*smartAcc)
         {
         case 0:
             // None

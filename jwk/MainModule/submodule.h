@@ -98,8 +98,6 @@
 #define MANUAL_MODE 0
 #define SMART_MODE 1
 
-typedef int bool;
-
 void initSensors(void);
 void initLED(void);
 void initButton(void);
@@ -116,9 +114,9 @@ void initMotor(void);
 void driveMotor(unsigned short*);
 void initConnect(void);
 void decideSpeedMode(unsigned int*, int*);
-void sendTX(int*, bool, int);
+void sendTX(int*, int, int*);
 void initPWMLED(void);
 void dimLED(unsigned int*, unsigned short*);
-void decideAcc(unsigned short* , unsigned short* , int* )
+void decideAcc(unsigned short* , unsigned short* , int* );
 
 #endif 

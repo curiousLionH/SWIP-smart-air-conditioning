@@ -19,7 +19,7 @@
     Description     : Set Buzzer
 */
 void initBuzzer(void)
-{   
+{
     P02_IOCR0.B.PC3 = 0x11; // GTM Output
     //P02_IOCR0.B.PC3 = 0x10; // General-purpose Output
 }
