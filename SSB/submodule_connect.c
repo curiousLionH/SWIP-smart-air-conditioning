@@ -85,7 +85,7 @@ void decideSpeedMode(unsigned int* adcResult, int* tgtMode)
 void sendTX(int* tgtMode, int MODE, int* smartAcc)
 {
     // Manual Mode => RGB LED (WHITE)
-    if(!MODE)
+    if(MODE == MANUAL_MODE)
     {
         P00_OUT.U &=  ~(0x1 << P0_BIT_LSB_IDX); // P00.0 OFF
 

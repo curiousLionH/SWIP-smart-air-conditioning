@@ -38,6 +38,7 @@ IfxCpu_syncEvent g_cpuSyncEvent = 0;
 
 // Initialize Mode Value
 int tgtMode = 0;
+unsigned int flag;
 unsigned short cur_duty = 0;
 unsigned short tgt_duty = 0;
 
@@ -63,7 +64,13 @@ void ERU0_ISR(void)
     default:
         break;
     }
+}
 
+__interrupt(0x0B) __vector_table(0)
+void CCU60_T12_ISR(void)
+{
+    if ( tgtMode == 3 )
+       flag = 1;
 }
 
 int core0_main(void)
@@ -88,20 +95,24 @@ int core0_main(void)
 
     // trigger update request signal
     GTM_TOM0_TGC0_GLB_CTRL.U |= 0x1 << HOST_TRIG_BIT_LSB_IDX;
-    unsigned short duty = 0;
+
+    unsigned short duty = 0, tgt_duty;
+    int smartAcc = 0;
 
     while(1)
     {
-        // temp value
-        int light = 25000;
-        int mode;
+        // if (flag)
+        // {
+        //     adcResult = 0;
+        //     continue;
+        // }
 
         // Manual Mode => RGB LED (WHITE)
         if ( P10_OUT.U & (0x1 << P3_BIT_LSB_IDX) )
         {
-            mode = 7;
-            VADC_startConversion(mode);
-            VADC_readResult(&adcResult, mode);
+            P00_OUT.U &=  ~(0x1 << P0_BIT_LSB_IDX); // P00.0 OFF
+            VADC_startConversion(MANUAL_MODE);
+            VADC_readResult(&adcResult, MANUAL_MODE);
 
             decideSpeedMode(&adcResult, &tgtMode);
             dimLED(&adcResult, &duty);
@@ -110,25 +121,16 @@ int core0_main(void)
         // Smart Mode => RGB LED (GREEN)
         else
         {
-            unsigned short tgt_duty;
-            int smartAcc = 0;
-
-            mode = 6;
-
-            VADC_startConversion(mode);
-            VADC_readResult(&adcResult, mode);
+            P00_OUT.U |=  (0x1 << P0_BIT_LSB_IDX); // P00.0 ON
+            VADC_startConversion(SMART_MODE);
+            VADC_readResult(&adcResult, SMART_MODE);
             
-            // decideSpeedMode(&adcResult, &tgtMode);
-            // dimLED(&adcResult, &duty);
+            tgt_duty = 20000 * adcResult /4096;
 
-            tgt_duty = 25000 * adcResult /1024;
-            // tgt_duty = 25000;
-
-            decideAcc(&cur_duty, &tgt_duty, &smartAcc);
-            sendTX(&tgtMode, SMART_MODE, &smartAcc);
+            // decideAcc(&adcResult, &tgtMode, &smartAcc);
+            // sendTX(&tgtMode, SMART_MODE, &smartAcc);
+            decideSpeedMode(&adcResult, &tgtMode);
             dimLED(&adcResult, &cur_duty);
-
-            for(int i=0; i<100000;i++); // delay_heuristic
         }
     }
     return (1);

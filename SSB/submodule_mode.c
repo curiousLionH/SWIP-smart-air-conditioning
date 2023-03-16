@@ -55,8 +55,11 @@ void setMode(void)
     Description     : decide SMART MODE ACC value
 */
 
-void decideAcc(unsigned short* cur_duty, unsigned short* tgt_duty, int* smartAcc)
+void decideAcc(unsigned int* cur_duty, unsigned int* tgt_duty, int* smartAcc)
 {
+    decideSpeedMode(&cur_duty, &tgt_duty);
+    /*
+    return;
     if(*cur_duty == *tgt_duty)
             {
                 // ... 
@@ -74,4 +77,5 @@ void decideAcc(unsigned short* cur_duty, unsigned short* tgt_duty, int* smartAcc
                 *smartAcc = 2;
                 *cur_duty = *cur_duty - 10;
             }
+    */
 }

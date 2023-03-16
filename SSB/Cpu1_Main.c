@@ -28,7 +28,19 @@
 #include "IfxCpu.h"
 #include "IfxScuWdt.h"
 
+#include "IfxCcu6_reg.h"
+#include "IfxVadc_reg.h"
+#include "IfxGtm_reg.h"
+
 extern IfxCpu_syncEvent g_cpuSyncEvent;
+extern unsigned int flag;
+
+unsigned int duty[4][2] = {{659, 523},
+                           {759, 563},
+                           {859, 603},
+                           {988, 659}};
+unsigned int duty_bip[1] = {1397};
+unsigned int duty_inc[24] = {659, 659, 698, 698, 740, 740, 784, 784, 831, 831, 880, 880, 932, 932, 988, 988, 1047, 1047, 1109, 1109, 1175, 1175, 1245, 1245};
 
 int core1_main(void)
 {
@@ -43,8 +55,30 @@ int core1_main(void)
     IfxCpu_emitEvent(&g_cpuSyncEvent);
     IfxCpu_waitEvent(&g_cpuSyncEvent, 1);
     
+    // Check CPU0 shutdown
     while(1)
     {
+        // if (flag)
+        // {
+        //     while (1)
+        //     {
+        //         for (unsigned int i = 0; i < 21; i++)
+        //         {
+        //             for (unsigned int j = 0; j < 1000000; j++)
+        //                 ;
+        //             GTM_TOM0_CH11_SR0.B.SR0 = 6250000 / duty_inc[i];
+        //             GTM_TOM0_CH11_SR1.B.SR1 = 3125000 / duty_inc[i];
+        //         }
+
+        //         for (unsigned int i = 0; i < 4; i++)
+        //         {
+        //             for (unsigned int j = 0; j < 1000000; j++)
+        //                 ;
+        //             GTM_TOM0_CH11_SR0.B.SR0 = 6250000 / duty_inc[21];
+        //             GTM_TOM0_CH11_SR1.B.SR1 = 3125000 / duty_inc[21];
+        //         }
+        //     }
+        // }
     }
     return (1);
 }

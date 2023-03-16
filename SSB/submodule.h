@@ -95,8 +95,8 @@
 #define SL_BIT_LSB_IDX              11
 
 // SMART, MANUAL MODE
-#define MANUAL_MODE 0
-#define SMART_MODE 1
+#define SMART_MODE                  6
+#define MANUAL_MODE                 7
 
 void initSensors(void);
 void initLED(void);
@@ -117,6 +117,6 @@ void decideSpeedMode(unsigned int*, int*);
 void sendTX(int*, int, int*);
 void initPWMLED(void);
 void dimLED(unsigned int*, unsigned short*);
-void decideAcc(unsigned short* , unsigned short* , int* );
+void decideAcc(unsigned int* , unsigned int* , int* );
 
 #endif 
