@@ -97,6 +97,6 @@ void usonicTrigger(void);
 void initCCU60(void);
 void initCCU61(void);
 void initSensors(void);
-void calDuty(void);
+float calDuty(void);
 
 #endif

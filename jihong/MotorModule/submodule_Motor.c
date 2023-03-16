@@ -42,9 +42,9 @@ void initMotor(void)
     Description     : Calculate Duty
 */
 
-void calDuty(void)
+float calDuty(void)
 {
-
+    float ratio = 1;
     if(P00_IN.B.P0 == 0) // manual mode
     {
         if ((P00_IN.B.P1 != 0)) {
@@ -68,7 +68,7 @@ void calDuty(void)
 
         if(range >= 50)
         {
-            duty = 0;
+            ratio = 0.5;
         }
         else if((P00_IN.B.P1 != 0))
         {
@@ -83,4 +83,5 @@ void calDuty(void)
             // Bypass
         }
     }
+    return ratio;
 }

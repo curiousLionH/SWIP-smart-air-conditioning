@@ -98,8 +98,9 @@ int core0_main(void)
     {
         usonicTrigger();
         while( range_valid_flag == 0);
+        float ratio = 1.0;
 
-        calDuty();
+        ratio = calDuty();
 
         // clipping
         if(duty >= 25000)
@@ -112,7 +113,7 @@ int core0_main(void)
         }
 
 
-        GTM_TOM0_CH9_SR1.B.SR1 = duty;
+        GTM_TOM0_CH9_SR1.B.SR1 = duty * ratio;
 
     }
     /////////////////////added_end
