@@ -53,33 +53,33 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := project_0315
+BUILD_ARTIFACT_NAME := project_main_final
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 SECONDARY_SIZE += \
-project_0315.siz \
+project_main_final.siz \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: project_0315.elf secondary-outputs
+main-build: project_main_final.elf secondary-outputs
 
 # Tool invocations
-project_0315.elf: $(OBJS) makefile objects.mk $(OPTIONAL_TOOL_DEPS)
+project_main_final.elf: $(OBJS) makefile objects.mk $(OPTIONAL_TOOL_DEPS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: TASKING Linker'
-	cctc -lrt -lfp_fpu -lcs_fpu  -Wl-Oc -Wl-OL -Wl-Ot -Wl-Ox -Wl-Oy -Wl--map-file="project_0315.map" -Wl-mc -Wl-mf -Wl-mi -Wl-mk -Wl-ml -Wl-mm -Wl-md -Wl-mr -Wl-mu --no-warnings= -Wl--error-limit=42 --exceptions --strict --anachronisms --force-c++ -Ctc27xd   -o"project_0315.elf" -Wl-o"project_0315.hex:IHEX" --lsl-core=vtc  --lsl-file=../Lcf_Tasking_Tricore_Tc.lsl $(OBJS)
+	cctc -lrt -lfp_fpu -lcs_fpu  -Wl-Oc -Wl-OL -Wl-Ot -Wl-Ox -Wl-Oy -Wl--map-file="project_main_final.map" -Wl-mc -Wl-mf -Wl-mi -Wl-mk -Wl-ml -Wl-mm -Wl-md -Wl-mr -Wl-mu --no-warnings= -Wl--error-limit=42 --exceptions --strict --anachronisms --force-c++ -Ctc27xd   -o"project_main_final.elf" -Wl-o"project_main_final.hex:IHEX" --lsl-core=vtc  --lsl-file=../Lcf_Tasking_Tricore_Tc.lsl $(OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-project_0315.siz: project_0315.elf makefile objects.mk $(OPTIONAL_TOOL_DEPS)
+project_main_final.siz: project_main_final.elf makefile objects.mk $(OPTIONAL_TOOL_DEPS)
 	@echo 'Invoking: Print Size'
-	elfsize  "project_0315.elf"
+	elfsize  "project_main_final.elf"
 	@echo 'Finished building: $@'
 	@echo ' '
 

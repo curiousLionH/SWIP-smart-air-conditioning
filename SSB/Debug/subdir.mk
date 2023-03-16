@@ -10,6 +10,7 @@ C_SRCS += \
 ../submodule_button.c \
 ../submodule_buzzer.c \
 ../submodule_ccu60.c \
+../submodule_connect.c \
 ../submodule_eru.c \
 ../submodule_gtm.c \
 ../submodule_init.c \
@@ -25,6 +26,7 @@ OBJS += \
 ./submodule_button.o \
 ./submodule_buzzer.o \
 ./submodule_ccu60.o \
+./submodule_connect.o \
 ./submodule_eru.o \
 ./submodule_gtm.o \
 ./submodule_init.o \
@@ -40,6 +42,7 @@ COMPILED_SRCS += \
 ./submodule_button.src \
 ./submodule_buzzer.src \
 ./submodule_ccu60.src \
+./submodule_connect.src \
 ./submodule_eru.src \
 ./submodule_gtm.src \
 ./submodule_init.src \
@@ -55,6 +58,7 @@ C_DEPS += \
 ./submodule_button.d \
 ./submodule_buzzer.d \
 ./submodule_ccu60.d \
+./submodule_connect.d \
 ./submodule_eru.d \
 ./submodule_gtm.d \
 ./submodule_init.d \
@@ -68,7 +72,7 @@ C_DEPS += \
 %.src: ../%.c subdir.mk
 	@echo 'Building file: $<'
 	@echo 'Invoking: TASKING C/C++ Compiler'
-	cctc -D__CPU__=tc27xd "-fC:/Projects/02_embedded_mcu/project_0315/Debug/TASKING_C_C___Compiler-Include_paths.opt" --iso=99 --c++14 --language=+volatile --exceptions --anachronisms --fp-model=3 -O0 --tradeoff=4 --compact-max-size=200 -g -Wc-w544 -Wc-w557 -Ctc27xd -o "$@"  "$<"  -cs --dep-file="$(@:.src=.d)" --misrac-version=2012 -N0 -Z0 -Y0 2>&1;
+	cctc -D__CPU__=tc27xd "-fC:/Projects/02_embedded_mcu/project_main_final/Debug/TASKING_C_C___Compiler-Include_paths.opt" --iso=99 --c++14 --language=+volatile --exceptions --anachronisms --fp-model=3 -O0 --tradeoff=4 --compact-max-size=200 -g -Wc-w544 -Wc-w557 -Ctc27xd -o "$@"  "$<"  -cs --dep-file="$(@:.src=.d)" --misrac-version=2012 -N0 -Z0 -Y0 2>&1;
 	@echo 'Finished building: $<'
 	@echo ' '
 

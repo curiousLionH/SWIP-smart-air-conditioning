@@ -20,9 +20,6 @@
 */
 void initButton(void)
 {
-    // P02_IOCR0.U &= ~(0x1F << PC1_BIT_LSB_IDX);       // reset P02_IOCR0 PC1
-    // P02_IOCR0.U |= 0x02 << PC1_BIT_LSB_IDX;          // set P02.1 general input (pull-up connected)
-
     P02_IOCR0.U &= ~(0x1F << PC0_BIT_LSB_IDX);       // reset P02_IOCR0 PC0
     P02_IOCR0.U |= 0x02 << PC0_BIT_LSB_IDX;          // set P02.0 general input (pull-up connected)
 }

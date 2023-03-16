@@ -17,13 +17,14 @@
 void initSensors(void)
 {
     initERU();
-    initCCU60();
-    //initCCU61();
-    initLED();
+    //initCCU60();
+    //initLED();
     initRGBLED();
+    initPWMLED();
     initVADC();
     initGTM();
     initButton();
     initBuzzer();
     initMotor();
+    initConnect();
 }

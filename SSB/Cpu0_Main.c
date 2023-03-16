@@ -35,21 +35,36 @@
 #include "IfxGtm_reg.h"
 
 IfxCpu_syncEvent g_cpuSyncEvent = 0;
-unsigned int cpu0_cnt;
+
+// Initialize Mode Value
+int tgtMode = 0;
+unsigned short cur_duty = 0;
+unsigned short tgt_duty = 0;
 
 __interrupt(0x0A) __vector_table(0)
 void ERU0_ISR(void)
 {
     setMode();
-}
 
-__interrupt(0x0B) __vector_table(0)
-void CCU60_T12_ISR(void)
-{
-    if ( cpu0_cnt <= 20 )
-       cpu0_cnt++;
-}
+    switch (tgtMode)
+    {
+    case 0:
+        cur_duty = 0;
+        break;
+    case 1:
+        cur_duty = 6000;
+        break;
+    case 2:
+        cur_duty = 12000;
+        break;
+    case 3:
+        cur_duty = 25000;
+        break;
+    default:
+        break;
+    }
 
+}
 
 int core0_main(void)
 {
@@ -69,32 +84,51 @@ int core0_main(void)
     initSensors();
 
     // Initialize duty value
-    unsigned short duty = 0;
     unsigned int adcResult;
+
+    // trigger update request signal
+    GTM_TOM0_TGC0_GLB_CTRL.U |= 0x1 << HOST_TRIG_BIT_LSB_IDX;
+    unsigned short duty = 0;
 
     while(1)
     {
+        // temp value
+        int light = 25000;
+        int mode;
+
         // Manual Mode => RGB LED (WHITE)
         if ( P10_OUT.U & (0x1 << P3_BIT_LSB_IDX) )
         {
-            VADC_startConversion();
-            VADC_readResult(&adcResult);
+            mode = 7;
+            VADC_startConversion(mode);
+            VADC_readResult(&adcResult, mode);
 
-            duty = (12500 * adcResult) / 4096;
-            GTM_TOM0_CH2_SR1.U = duty;
-
-            driveMotor(&duty);
+            decideSpeedMode(&adcResult, &tgtMode);
+            dimLED(&adcResult, &duty);
         }
 
         // Smart Mode => RGB LED (GREEN)
         else
         {
-            /*
-            TO DO:
-            1. Humanity Data Sensing
-            2. Humanity Data => Digital Value (ADC)
-            3. Motor Generating
-            */
+            unsigned short tgt_duty;
+            int smartAcc = 0;
+
+            mode = 6;
+
+            VADC_startConversion(mode);
+            VADC_readResult(&adcResult, mode);
+            
+            // decideSpeedMode(&adcResult, &tgtMode);
+            // dimLED(&adcResult, &duty);
+
+            tgt_duty = 25000 * adcResult /1024;
+            // tgt_duty = 25000;
+
+            decideAcc(&cur_duty, &tgt_duty, &smartAcc);
+            sendTX(&tgtMode, SMART_MODE, &smartAcc);
+            dimLED(&adcResult, &cur_duty);
+
+            for(int i=0; i<100000;i++); // delay_heuristic
         }
     }
     return (1);

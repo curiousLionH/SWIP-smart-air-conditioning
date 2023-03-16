@@ -7,6 +7,8 @@
 #include "IfxCpu.h"
 #include "IfxScuWdt.h"
 
+#include "IfxGtm_reg.h"
+
 #include "submodule.h"
 
 /*
@@ -50,4 +52,33 @@ void initRGBLED(void)
     P10_OUT.U |= (0x1 << P3_BIT_LSB_IDX); // Blue
     P10_OUT.U |= (0x1 << P5_BIT_LSB_IDX); // Green
     P02_OUT.U |= (0x1 << P7_BIT_LSB_IDX); // Red
+}
+
+/*
+    Function Name   : initPWMLED
+    Author          : SWIP 1th - Team 1
+    Date            : 2023.03.16
+    input           : void
+    output          : void
+    Description     : Set PWM LED sensor to use
+*/
+void initPWMLED(void)
+{
+    P10_IOCR0.U &= ~(0x1F << PC2_BIT_LSB_IDX);     // reset P10_IOCR0 PC2
+
+    P10_IOCR0.U |= 0x11 << PC2_BIT_LSB_IDX;        // set P10.2 push-pull general output
+}
+
+/*
+    Function Name   : dimLED
+    Author          : SWIP 1th - Team 1
+    Date            : 2023.03.16
+    input           : unsigned int*, unsigned shor*
+    output          : void
+    Description     : dim PWM LED
+*/
+void dimLED(unsigned int* adcResult, unsigned short* duty)
+{
+    *duty = 12500 * (*adcResult) / 4096;
+    GTM_TOM0_CH2_SR1.U = *duty;
 }

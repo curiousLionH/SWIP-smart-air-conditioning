@@ -13,6 +13,7 @@
 #define PC3_BIT_LSB_IDX         27
 #define PC5_BIT_LSB_IDX         11
 #define PC7_BIT_LSB_IDX         27
+#define P0_BIT_LSB_IDX          0
 #define P1_BIT_LSB_IDX          1
 #define P2_BIT_LSB_IDX          2
 #define P3_BIT_LSB_IDX          3
@@ -93,6 +94,10 @@
 #define TRIGOUT_BIT_LSB_IDX         24
 #define SL_BIT_LSB_IDX              11
 
+// SMART, MANUAL MODE
+#define MANUAL_MODE 0
+#define SMART_MODE 1
+
 void initSensors(void);
 void initLED(void);
 void initButton(void);
@@ -100,12 +105,18 @@ void initERU(void);
 void initCCU60(void);
 void initRGBLED(void);
 void initVADC(void);
-void VADC_startConversion(void);
-void VADC_readResult(unsigned int*);
+void VADC_startConversion(int);
+void VADC_readResult(unsigned int*, int);
 void initGTM(void);
 void initBuzzer(void);
 void setMode(void);
 void initMotor(void);
 void driveMotor(unsigned short*);
+void initConnect(void);
+void decideSpeedMode(unsigned int*, int*);
+void sendTX(int*, int, int*);
+void initPWMLED(void);
+void dimLED(unsigned int*, unsigned short*);
+void decideAcc(unsigned short* , unsigned short* , int* );
 
 #endif 

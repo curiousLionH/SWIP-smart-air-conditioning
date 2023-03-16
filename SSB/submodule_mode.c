@@ -45,3 +45,33 @@ void setMode(void)
     GTM_TOM0_CH11_SR0.B.SR0 = 0;
     GTM_TOM0_CH11_SR1.B.SR1 = 0;
 }
+
+/*
+    Function Name   : decideACC
+    Author          : SWIP 1th - Team 1
+    Date            : 2023.03.15
+    input           : unsigned short*, unsigned short* , int*
+    output          : void
+    Description     : decide SMART MODE ACC value
+*/
+
+void decideAcc(unsigned short* cur_duty, unsigned short* tgt_duty, int* smartAcc)
+{
+    if(*cur_duty == *tgt_duty)
+            {
+                // ... 
+                *smartAcc = 0;
+            }
+            else if(*cur_duty < *tgt_duty)
+            {
+                // Acc
+                *smartAcc = 1;
+                *cur_duty = *cur_duty + 10;
+            }
+            else 
+            {
+                // Dec
+                *smartAcc = 2;
+                *cur_duty = *cur_duty - 10;
+            }
+}
