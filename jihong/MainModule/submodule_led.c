@@ -51,3 +51,10 @@ void initRGBLED(void)
     P10_OUT.U |= (0x1 << P5_BIT_LSB_IDX); // Green
     P02_OUT.U |= (0x1 << P7_BIT_LSB_IDX); // Red
 }
+
+void initPWMLED(void)
+{
+    P10_IOCR0.U &= ~(0x1F << PC2_BIT_LSB_IDX);     // reset P10_IOCR0 PC2
+
+    P10_IOCR0.U |= 0x11 << PC2_BIT_LSB_IDX;        // set P10.2 push-pull general output
+}
