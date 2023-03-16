@@ -99,28 +99,16 @@ int core0_main(void)
         usonicTrigger();
         while( range_valid_flag == 0);
 
-        if(range >= 50)
+        duty = calDuty();
+        
+        // clipping
+        if(duty >= 25000)
+        {
+            duty = 25000;
+        }
+        else if(duty < 0)
         {
             duty = 0;
-        }
-        else if ((P00_IN.B.P1 != 0)) {
-            duty = 20000;
-            speed_mode = 3;
-        }
-        else if ((P00_IN.B.P3 != 0) && (P00_IN.B.P2 == 0))
-        {
-            duty = (25000 * 2000) / 4096;
-            speed_mode = 2;
-        }
-        else if ((P00_IN.B.P3 == 0) && (P00_IN.B.P2 != 0))
-        {
-            duty = (25000 * 1000) / 4096;
-            speed_mode = 1;
-        }
-        else if ((P00_IN.B.P3 == 0) && (P00_IN.B.P2 == 0))
-        {
-            duty = 0;
-            speed_mode = 0;
         }
 
 
