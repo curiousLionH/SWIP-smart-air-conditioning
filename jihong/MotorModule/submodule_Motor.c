@@ -10,6 +10,7 @@
 #include "submodule.h"
 
 extern unsigned int range;
+extern unsigned int duty;
 
 /*
     Function Name   : initMotor
@@ -41,9 +42,8 @@ void initMotor(void)
     Description     : Calculate Duty
 */
 
-unsigned int calDuty(void)
+void calDuty(void)
 {
-    unsigned int duty = 0;
 
     if(P00_IN.B.P0 == 0) // manual mode
     {
@@ -83,6 +83,4 @@ unsigned int calDuty(void)
             // Bypass
         }
     }
-
-    return duty;
 }

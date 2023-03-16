@@ -30,4 +30,7 @@ void initRX(void)
 
     P00_IOCR0.U &= ~(0x1F << PC2_BIT_LSB_IDX);
     P00_IOCR0.U |= (0x01 << PC2_BIT_LSB_IDX);
+
+    P00_IOCR0.U &= ~(0x1F << PC0_BIT_LSB_IDX);
+    P00_IOCR0.U |= (0x01 << PC0_BIT_LSB_IDX);
 }

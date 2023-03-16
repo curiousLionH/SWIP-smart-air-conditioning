@@ -99,8 +99,8 @@ int core0_main(void)
         usonicTrigger();
         while( range_valid_flag == 0);
 
-        duty = calDuty();
-        
+        calDuty();
+
         // clipping
         if(duty >= 25000)
         {
