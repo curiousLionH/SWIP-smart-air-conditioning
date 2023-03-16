@@ -96,9 +96,14 @@ int core0_main(void)
 
     while(1)
     {
-        printf("range: %d\n", range);
-        // speed mode
-        if ((P00_IN.B.P1 != 0)) {
+        usonicTrigger();
+        while( range_valid_flag == 0);
+
+        if(range >= 50)
+        {
+            duty = 0;
+        }
+        else if ((P00_IN.B.P1 != 0)) {
             duty = 20000;
             speed_mode = 3;
         }
@@ -117,6 +122,7 @@ int core0_main(void)
             duty = 0;
             speed_mode = 0;
         }
+
 
         GTM_TOM0_CH9_SR1.B.SR1 = duty;
 
