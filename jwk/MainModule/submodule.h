@@ -110,5 +110,6 @@ void driveMotor(unsigned short*);
 void initConnect(void);
 void decideSpeedMode(unsigned int*, int*);
 void sendTX(int*);
+void dimLED(unsigned int*, unsigned short*);
 
 #endif 

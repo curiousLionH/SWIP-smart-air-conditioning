@@ -42,13 +42,6 @@ void ERU0_ISR(void)
     setMode();
 }
 
-__interrupt(0x0B) __vector_table(0)
-void CCU60_T12_ISR(void)
-{
-    //P10_OUT.U ^= 0x1 << P2_BIT_LSB_IDX;  // toggle P10.2 (LED D13 BLUE)
-}
-
-
 int core0_main(void)
 {
     IfxCpu_enableInterrupts();
@@ -72,6 +65,10 @@ int core0_main(void)
     // Initialize Mode Value
     int tgtMode = 0;
 
+    // trigger update request signal
+    GTM_TOM0_TGC0_GLB_CTRL.U |= 0x1 << HOST_TRIG_BIT_LSB_IDX;
+    unsigned short duty = 0;
+
     while(1)
     {
         // Manual Mode => RGB LED (WHITE)
@@ -79,8 +76,9 @@ int core0_main(void)
         {
             VADC_startConversion();
             VADC_readResult(&adcResult);
-
+            
             decideSpeedMode(&adcResult, &tgtMode);
+            dimLED(&adcResult, &duty);
         }
 
         // Smart Mode => RGB LED (GREEN)
