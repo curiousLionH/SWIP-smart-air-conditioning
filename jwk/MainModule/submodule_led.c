@@ -55,12 +55,12 @@ void initRGBLED(void)
 }
 
 /*
-    Function Name   : initRGBLED
+    Function Name   : initPWMLED
     Author          : SWIP 1th - Team 1
-    Date            : 2023.03.15
+    Date            : 2023.03.16
     input           : void
     output          : void
-    Description     : Set LED sesor to use
+    Description     : Set PWM LED sensor to use
 */
 void initPWMLED(void)
 {
@@ -70,12 +70,12 @@ void initPWMLED(void)
 }
 
 /*
-    Function Name   : initRGBLED
+    Function Name   : dimLED
     Author          : SWIP 1th - Team 1
-    Date            : 2023.03.15
-    input           : void
+    Date            : 2023.03.16
+    input           : unsigned int*, unsigned shor*
     output          : void
-    Description     : Set LED sesor to use
+    Description     : dim PWM LED
 */
 void dimLED(unsigned int* adcResult, unsigned short* duty)
 {
