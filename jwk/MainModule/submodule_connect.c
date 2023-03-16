@@ -32,10 +32,13 @@ void initConnect(void)
     P00_IOCR0.U &= ~(0x1F << PC1_BIT_LSB_IDX);
     P00_IOCR0.U |= (0x10 << PC1_BIT_LSB_IDX);
 
+    P00_IOCR0.U &= ~(0x1F << PC0_BIT_LSB_IDX);
+    P00_IOCR0.U |= (0x10 << PC0_BIT_LSB_IDX);
+
     P00_OUT.U &= ~(0x1 << P3_BIT_LSB_IDX);
     P00_OUT.U &= ~(0x1 << P2_BIT_LSB_IDX);
     P00_OUT.U &= ~(0x1 << P1_BIT_LSB_IDX);
-
+    P00_OUT.U &= ~(0x1 << P0_BIT_LSB_IDX);
 }
 
 /*
@@ -66,7 +69,7 @@ void decideSpeedMode(unsigned int* adcResult, int* tgtMode)
         *tgtMode = 0;
     }
 
-    sendTX(tgtMode);
+    sendTX(tgtMode, MANUAL_MODE, 0);
 
 }
 
@@ -79,37 +82,73 @@ void decideSpeedMode(unsigned int* adcResult, int* tgtMode)
     Description     : send TX (void)
 */
 
-void sendTX(int* tgtMode)
+void sendTX(int* tgtMode, bool MODE, int smartAcc)
 {
-    switch (*tgtMode)
+    // Manual Mode => RGB LED (WHITE)
+    if(!MODE)
     {
-    case 0:
-        // send mode 0
-        P00_OUT.U &= ~(0x1 << P1_BIT_LSB_IDX); // P00.1 OFF
-        P00_OUT.U &= ~(0x1 << P2_BIT_LSB_IDX); // P00.2 OFF
-        P00_OUT.U &= ~(0x1 << P3_BIT_LSB_IDX); // P00.3 OFF
-        break;
-    case 1:
-        // send mode 1
-        P00_OUT.U &= ~(0x1 << P1_BIT_LSB_IDX); // P00.1 OFF
-        P00_OUT.U |=  (0x1 << P2_BIT_LSB_IDX); // P00.2 ON
-        P00_OUT.U &= ~(0x1 << P3_BIT_LSB_IDX); // P00.3 OFF
-        break;
-    case 2:
-        // send mode 2
-        P00_OUT.U &= ~(0x1 << P1_BIT_LSB_IDX); // P00.1 OFF
-        P00_OUT.U &= ~(0x1 << P2_BIT_LSB_IDX); // P00.2 OFF
-        P00_OUT.U |=  (0x1 << P3_BIT_LSB_IDX); // P00.3 ON
-        break;
-    case 3:
-        // send mode 3
-        P00_OUT.U |=  (0x1 << P1_BIT_LSB_IDX); // P00.1 ON
-        P00_OUT.U &= ~(0x1 << P2_BIT_LSB_IDX); // P00.2 OFF
-        P00_OUT.U &= ~(0x1 << P3_BIT_LSB_IDX); // P00.3 OFF
-        break;
-    default:
-        break;
+        P00_OUT.U &=  ~(0x1 << P0_BIT_LSB_IDX); // P00.0 OFF
+
+        switch (*tgtMode)
+        {
+        case 0:
+            // send mode 0
+            P00_OUT.U &= ~(0x1 << P1_BIT_LSB_IDX); // P00.1 OFF
+            P00_OUT.U &= ~(0x1 << P2_BIT_LSB_IDX); // P00.2 OFF
+            P00_OUT.U &= ~(0x1 << P3_BIT_LSB_IDX); // P00.3 OFF
+            break;
+        case 1:
+            // send mode 1
+            P00_OUT.U &= ~(0x1 << P1_BIT_LSB_IDX); // P00.1 OFF
+            P00_OUT.U |=  (0x1 << P2_BIT_LSB_IDX); // P00.2 ON
+            P00_OUT.U &= ~(0x1 << P3_BIT_LSB_IDX); // P00.3 OFF
+            break;
+        case 2:
+            // send mode 2
+            P00_OUT.U &= ~(0x1 << P1_BIT_LSB_IDX); // P00.1 OFF
+            P00_OUT.U &= ~(0x1 << P2_BIT_LSB_IDX); // P00.2 OFF
+            P00_OUT.U |=  (0x1 << P3_BIT_LSB_IDX); // P00.3 ON
+            break;
+        case 3:
+            // send mode 3
+            P00_OUT.U |=  (0x1 << P1_BIT_LSB_IDX); // P00.1 ON
+            P00_OUT.U &= ~(0x1 << P2_BIT_LSB_IDX); // P00.2 OFF
+            P00_OUT.U &= ~(0x1 << P3_BIT_LSB_IDX); // P00.3 OFF
+            break;
+        default:
+            break;
+        }
+    }
+    // Smart Mode => RGB LED (GREEN)
+    else
+    {
+        P00_OUT.U |=  (0x1 << P0_BIT_LSB_IDX); // P00.0 ON
+
+        switch (smartAcc)
+        {
+        case 0:
+            // None
+            P00_OUT.U &= ~(0x1 << P1_BIT_LSB_IDX); // P00.1 OFF
+            P00_OUT.U &= ~(0x1 << P2_BIT_LSB_IDX); // P00.2 OFF
+            P00_OUT.U &= ~(0x1 << P3_BIT_LSB_IDX); // P00.3 OFF
+            break;
+        case 1:
+            // Accelerate
+            P00_OUT.U |=  (0x1 << P1_BIT_LSB_IDX); // P00.1 ON
+            P00_OUT.U &= ~(0x1 << P2_BIT_LSB_IDX); // P00.2 OFF
+            P00_OUT.U &= ~(0x1 << P3_BIT_LSB_IDX); // P00.3 OFF
+            break;
+        case 2:
+            // Decelerate
+            P00_OUT.U &= ~(0x1 << P1_BIT_LSB_IDX); // P00.1 OFF
+            P00_OUT.U |=  (0x1 << P2_BIT_LSB_IDX); // P00.2 ON
+            P00_OUT.U &= ~(0x1 << P3_BIT_LSB_IDX); // P00.3 OFF
+            break;
+        default:
+            break;
+        }
     }
 
+    
 }
 
